@@ -8,6 +8,7 @@ import {Text, View, StyleSheet, TouchableOpacity, Platform} from 'react-native'
 class Question extends Component{
   state={
     questionpos:0,
+    mode: 'question',
     correct:0,
     toculminate:false,
   }
@@ -16,11 +17,14 @@ class Question extends Component{
     const {cards} = this.props
 
     this.setState(prevState => ({
+      mode: 'question',
       correct: answer === true ? prevState.correct + 1 : prevState.correct,
       questionpos: (cards[prevState.questionpos+1]!==undefined) ? prevState.questionpos+1 : prevState.questionpos,
       toculminate:!(cards[prevState.questionpos+1]!==undefined)
     }));
   }
+
+  setMode = (mode) => this.setState({mode: mode})
 
   restart = () => {
     this.setState({
@@ -56,11 +60,7 @@ class Question extends Component{
         <View style={{flex: 1}}>
           {!toculminate &&
             <View style={styles.flipCardContainer}>
-              <FlipCard
-                style={styles.flipCard}
-                friction={10}
-                flipHorizontal={false}
-                flipVertical={true}>
+              {  this.state.mode !== 'answer' &&
                   <View style={{flex:1}}>
                     <View style={styles.cardContentTop}>
                       <Text style={styles.cardContentTopText}>
@@ -70,6 +70,9 @@ class Question extends Component{
                     <View style={styles.cardContentCenter}>
                       <Text style={styles.cardContentCenterText}>{cards[questionpos]['question']}</Text>
                     </View>
+                    <TouchableOpacity
+                        activeOpacity = {.5}
+                        onPress={() => this.setMode('answer')}>
                     <View style={styles.cardStyle}>
                         <View style={[styles.buttonStyle]}>
                           <Text>
@@ -77,9 +80,11 @@ class Question extends Component{
                           </Text>
                         </View>
                     </View>
+                    </TouchableOpacity>
                   </View>
+    }
 
-                  <View style={{flex:1}}>
+                  { this.state.mode === 'answer' &&  <View style={{flex:1}}>
                     <View style={styles.cardContentTop}>
                       <Text style={styles.cardContentTopText}>
                         Answer {questionpos + 1} / {cards.length}
@@ -108,10 +113,8 @@ class Question extends Component{
                         </View>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                </FlipCard>
-              </View>
-          }
+                  </View> }
+                </View> }
 
           {toculminate &&
             <View style={styles.flipCard}>
