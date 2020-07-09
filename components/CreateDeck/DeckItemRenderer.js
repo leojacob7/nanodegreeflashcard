@@ -1,11 +1,24 @@
 import React, { Component }from 'react'
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import {Animated, View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 
 export default class DeckItemRenderer extends Component{
+  constructor() {
+    super()
+    this.opacity = new Animated.Value(0)
+}
+
+componentDidUnMount() {
+  Animated.timing(this.opacity, {
+      toValue: 1,
+      duration: 3500,
+      useNativeDriver: true
+  }).start();
+}
 
   render() {
     const { item, handleDetail, onDelete } = this.props
     const noCards = item.questions.length === 0 ? true : false
+    const animatedStyle = { opacity: this.opacity }
     return (
       <View style={styles.container}>
         <Text>{item.title}</Text>
@@ -33,9 +46,9 @@ export default class DeckItemRenderer extends Component{
         )}
 
         <TouchableOpacity activeOpacity={0.5} onPress={handleDetail}>
-          <View style={[styles.btnstyle]}>
+          <Animated.View style={[styles.btnstyle]} onPress={this.fadeOut}>
             <Text>Open</Text>
-          </View>
+          </Animated.View>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}

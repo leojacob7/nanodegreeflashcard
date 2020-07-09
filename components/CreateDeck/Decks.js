@@ -1,15 +1,28 @@
 import React, {Component} from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, Alert } from "react-native";
+import { Animated, View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, Alert } from "react-native";
 import { connect } from 'react-redux'
 import { removeDeckAction } from '../../redux/actions/decks'
 import DeckItemRenderer from './DeckItemRenderer'
 
 class Decks extends Component{
+  constructor() {
+    super()
+    this.opacity = new Animated.Value(0)
+}
+
+componentDidMount() {
+  Animated.timing(this.opacity, {
+      toValue: 1,
+      duration: 1500,
+      useNativeDriver: true
+  }).start();
+}
 
   render() {
+    const animatedStyle = { opacity: this.opacity }
     const {decks,dispatch,hasDecks} = this.props;
       return (
-        <View style={{flex:1}}>
+        <Animated.View style={{flex:1}}>
           {hasDecks === true &&
           <FlatList
             data={Object.values(decks)}
@@ -42,7 +55,7 @@ class Decks extends Component{
               </Text>
             </View>
           }
-        </View>
+        </Animated.View>
       )
     }
 }

@@ -1,13 +1,27 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native'
+import {Animated, View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native'
 
 class Deck extends Component{
+  constructor() {
+    super()
+    this.opacity = new Animated.Value(0)
+}
+
+componentDidMount() {
+  Animated.timing(this.opacity, {
+      toValue: 1,
+      duration: 1500,
+      useNativeDriver: true
+  }).start();
+}
+
   render(){
-    const { item, handleDetail, onDelete } = this.props
+    const { item, handleDetail, onDelete } = this.props;
+    const animatedStyle = { opacity: this.opacity }
     const {entryId, deck: { title, totalscore, questions }, navigation: { navigate }} = this.props
     return(
-      <View style={styles.wrapper}>
+      <Animated.View style={styles.wrapper}>
         <Text>
           {`Deck: ${ title }`}
         </Text>
@@ -40,7 +54,7 @@ class Deck extends Component{
             </Text>
           </View> }
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     )
   }
 }
