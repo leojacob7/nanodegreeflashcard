@@ -5,7 +5,6 @@ import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native'
 class Deck extends Component{
   render(){
     const { item, handleDetail, onDelete } = this.props
-    const noCards = item.questions.length === 0
     const {entryId, deck: { title, totalscore, questions }, navigation: { navigate }} = this.props
     return(
       <View style={styles.wrapper}>

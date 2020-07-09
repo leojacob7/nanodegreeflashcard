@@ -121,7 +121,7 @@ class Question extends Component{
                     {`Score ${this.state.correct} Point`}
                   </Text>
                   <Text style={styles.cardContentCenterText}>
-                    {this.calculatePercentage()}
+                    {`${ this.calculatePercentage()}%`}
                   </Text>
                 </View>
                 <View style={styles.cardStyle}>
